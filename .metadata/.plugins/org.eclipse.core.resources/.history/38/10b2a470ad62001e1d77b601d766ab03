@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module ClientEJB {
+	requires java.naming;
+	requires BanqueEJB;
+}

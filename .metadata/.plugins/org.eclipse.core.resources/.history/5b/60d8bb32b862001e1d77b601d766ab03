@@ -1,0 +1,56 @@
+import java.util.List;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import metier.BanqueRemote;
+import metier.entities.Compte;
+
+public class ClientRemoteRMI {
+
+	public static void main(String[] args) {
+		try {
+			Context ctx = new InitialContext();
+			String appName = "";
+			String moduleName = "BanqueEJB";
+			String beanName = "BK";
+			String remoteInterface = "metier.BanqueRemote";// BanqueRemote.class.getName()
+
+			// ejb: is added because we dont have the propertie java.naming.factory.initial
+
+			String name = "ejb:" + appName + "/" + moduleName + "/" + beanName + "!" + remoteInterface;
+
+			BanqueRemote proxy = (BanqueRemote) ctx.lookup(name);
+
+			/*
+			 * proxy.addCompte(new Compte()); proxy.addCompte(new Compte());
+			 * proxy.addCompte(new Compte());
+			 */
+
+			Compte cp = proxy.getCompte(1L);
+			System.out.println(cp.getSolde());
+
+			proxy.verser(1L, 50000);
+
+			System.out.println(cp.getSolde());
+
+			proxy.retirer(1L, 2000);
+
+			System.out.println(cp.getSolde());
+
+			proxy.virement(1L, 2L, 10000);
+
+			List<Compte> cptes = proxy.listComptes();
+
+			for (Compte compte : cptes) {
+
+				System.out.println(compte.getCode() + ":" + compte.getSolde());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

@@ -1,0 +1,21 @@
+package metier;
+
+import java.util.List;
+
+import javax.ejb.Local;
+
+@Local
+public interface BanquLocale {
+	public Compte addCompte(Compte cp);
+
+	public Compte getCompte(Long code);
+
+	public List<Compte> listComptes();
+
+	public Compte verser(Long code, double mnt);
+
+	public Compte retirer(Long code, double mnt);
+
+	public Compte virement(Long code1, Long code2, double mnt);
+
+}

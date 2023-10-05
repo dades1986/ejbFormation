@@ -1,0 +1,31 @@
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import metier.BanqueRemote;
+import metier.entities.Compte;
+
+
+public class ClientRemoteRMI {
+
+	public static void main(String[] args) {
+		try {
+			Context ctx = new InitialContext();
+			String appName = "";
+			String moduleName = "BanqueEJB";
+			String beanName = "BK";
+			String remoteInterface = "metier.BanqueRemote";//BanqueRemote.class.getName()
+			
+			String name= appName+"/"+moduleName+"/"+beanName+"!"+remoteInterface;
+			
+			BanqueRemote proxy = (BanqueRemote) ctx.lookup(name);
+			
+			proxy.addCompte(new Compte());
+			proxy.addCompte(new Compte());
+			proxy.addCompte(new Compte());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

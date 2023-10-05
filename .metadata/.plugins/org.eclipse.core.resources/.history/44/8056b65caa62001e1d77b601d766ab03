@@ -1,0 +1,81 @@
+package metier;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import metier.entities.Compte;
+/*
+ * ejb session est representé par 3 annotations, @Singleton, @StateLess ou StateFul
+ * 
+ * @Singleton : wildfly va creer une seule instance de cet ejb quelque soit le nombre de connection
+ * @StateLess est la plus utilisé, au depart wildfly va crerr une instance qui sera utilisé par plusieurs connexions
+ * mais quand y'aura une charge (plus de connexions simultanées) , il va creer une autre instance, a chaque fois qu'on depasse 
+ * un nombre de connexion, il va cerr une 2 eme instance , ensuite une 3eme  etc etc  pour
+ * repartir la charge
+ * @Stateful : pour chaque connexion client, y'a une creation d'instance
+ * 
+ * JNDI : le conteneur de ejb , creer une instance , il le publie dans l'annuaire, dans des applications distribué
+ * on publmie la reference dans l'annuaire, ==>reference api, port et adresse memeoire de l'objet
+ * 
+ * 
+ *objet 1 dans  application 1, dans une machine 1 ----communique----->objet2 dans  application2, dans une machine 2 (passer par annuaire)
+ *
+ *toutes les methodes sont imlicietement transactionnel, wildfly manage the transaction par defaut
+ *trasaction can done by container, gean (developper) or client.
+ * 
+ * */
+
+@Stateless(name = "BK")
+public class BanqueEjbImpl implements BanqueLocale, BanqueRemote {
+
+	@PersistenceContext(unitName = "BanqueEjb") // inject an EntityManager, entity manager will use a persistence unit
+												// in persistance.xml
+	private EntityManager em;
+
+	@Override
+	public Compte addCompte(Compte cp) {
+		em.persist(cp);
+		return cp;
+	}
+
+	@Override
+	public Compte getCompte(Long code) {
+		Compte cp = em.find(Compte.class, code);
+		if (cp == null)
+			throw new RuntimeException("Compte introuvable");
+		return cp;
+	}
+
+	@Override
+	public List<Compte> listComptes() {
+		Query req = em.createQuery("Select c from Compte c");
+		return req.getResultList();
+	}
+
+	@Override
+	public void verser(Long code, double mnt) {
+		Compte cp = getCompte(code);
+		cp.setSolde((cp.getSolde() + mnt));
+	}
+
+	@Override
+	public void retirer(Long code, double mnt) {
+		Compte cp = getCompte(code);
+		if (cp.getSolde() < mnt)
+			throw new RuntimeException("Solde insuffisant");
+		cp.setSolde((cp.getSolde() - mnt));
+	}
+
+	@Override
+	public void virement(Long code1, Long code2, double mnt) {
+		// this code is in one transaction, two operations should be executed both , or
+		// rallbacked both
+		retirer(code1, mnt);
+		verser(code2, mnt);
+	}
+
+}

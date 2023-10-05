@@ -1,0 +1,21 @@
+
+package formation.senegal;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import metier.BanqueRemote;
+
+public class ClientRemoteRMI {
+
+	public static void main(String[] args) {
+		try {
+			Context ctx = new InitialContext();
+			BanqueRemote proxy = new 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

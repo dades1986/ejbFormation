@@ -1,0 +1,21 @@
+# Example jboss-ejb-client.properties file
+
+# The EJB client context selector strategy class. You can customize this based on your needs.
+# This example uses the default context selector.
+endpoint.name=client-endpoint
+
+# The EJB client connection strategy class.
+# This example uses the remote-outbound-connection strategy.
+remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED=false
+remote.connections=default
+remote.connection.default.host=127.0.0.1
+remote.connection.default.port=4447
+remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS=false
+
+# Security settings for authentication and authorization.
+remote.connection.default.username=oumina
+remote.connection.default.password=mypassword
+
+# Timeout settings for EJB client requests.
+remote.connection.default.connect.timeout=5000
+remote.connection.default.read.timeout=5000
