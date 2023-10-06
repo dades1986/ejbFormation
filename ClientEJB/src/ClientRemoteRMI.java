@@ -20,7 +20,7 @@ public class ClientRemoteRMI {
 
 			String name = "ejb:" + appName + "/" + moduleName + "/" + beanName + "!" + remoteInterface;
 
-			BanqueRemote proxy = (BanqueRemote) ctx.lookup(name);
+			BanqueRemote proxy = (BanqueRemote) ctx.lookup("ejb:BanqueEAR/BanqueEJB/BK!metier.BanqueRemote");
 
 			/*
 			 * proxy.addCompte(new Compte());

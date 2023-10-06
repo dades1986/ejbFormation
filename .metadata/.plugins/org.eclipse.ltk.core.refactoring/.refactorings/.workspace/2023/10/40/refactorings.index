@@ -1,2 +1,6 @@
 1696419703594	Rename resource 'banqueEjb'
 1696422867391	Delete resource 'ClientEJB'
+1696534021735	Delete resource 'BanqueWeb'
+1696535720007	Delete resource 'testWeb'
+1696535931759	Delete resource 'BanqueWeb'
+1696546182357	Delete resource 'BanqueWeb/src/main/java/service/jndi.properties'
